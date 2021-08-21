@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
+    <link rel="stylesheet" href='{% static 'style.css' %}'>
+    <title>Der Ofen</title>
+</head>
+
+<body>
+    <div class="logo">
+        <img src="{% static 'logo/logo.png' %}" alt="derofen">
+    </div>
+
+    <div class="produkte">
+        <div class="container">
+        {% for produkt in produkte %}
+            {% if produkt.verfugbar %}
+                <div class="produkt">
+                    <div class="partUp">
+                        <img src="{{ produkt.foto.url }}" alt="produkt">
+                        <h2>{{ produkt.name }}</h2>
+                    </div>
+                    <div class="partDown">
+                            {% if produkt.getreide %}
+                            <div class="list-item">
+                                <img src="{% static 'pageComponents/wheat.svg' %}" alt="Getreide Sorte" style="width: 30px">
+                                <p>{{ produkt.getreide }}</p>
+                            </div>
+                            {% endif %}
+                            <div class="list-item">
+                                <img src="{% static 'pageComponents/balance-scale.svg' %}" alt="Inhalt" style="width: 30px">
+                                <p>Inhalt = {{ produkt.gewicht }} g</p>
+                            </div>
+                            <div class="list-item kalorien">
+                                <img src="{% static 'pageComponents/burn.svg' %}" alt="kcal" style="width: 30px">
+                                <p><span style="color: #eebe33">{{ produkt.kalorien_100g }} kcal</span> pro 100 g</p>
+                            </div>
+                    </div>
+                    <div class="details">
+                        <img src="{% static 'pageComponents/up-arrow.svg' %}" alt="up" style="width: 20px">
+                            <div class="list-item">
+                                <img src="{% static 'pageComponents/burn.svg' %}" alt="kcal" style="width: 30px">
+                                <p>{{ produkt.kalorien_gesamt }} kcal</p>
+                            </div>
+                            <p>Um dieses Produkt zu verbrennen, müsstest du ungefähr...</p>
+                            <div class="list-item">
+                                <img src="{% static 'pageComponents/person-walking.svg' %}" alt="Gehen" style="width: 50px">
+                                <p>{{ produkt.gehen }} min. gehen</p>
+                            </div>
+                            <p>oder...</p>
+                            <div class="list-item">
+                                <img src="{% static 'pageComponents/running-stick-figure.svg' %}" alt="Joggen" style="width: 50px">
+                                <p>{{ produkt.joggen }} min. joggen</p>
+                            </div>
+                    </div>
+                    <div class="id">
+                        <p>#{{ produkt.id }}</p>
+                    </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+
+    <nav>
+        <form method="POST">
+            {% csrf_token %}
+            <button name="Brot" class="btn brot {% if kategorie == 'Brot' %}ausgewahlt{% endif %}" type="submit">Brot</button>
+        </form>
+        <form method="POST">
+            {% csrf_token %}
+            <button name="Süßwaren" class="btn süsswaren {% if kategorie == 'Süßwaren' %}ausgewahlt{% endif %}" type="submit">Süßwaren</button>
+        </form>
+        <form method="POST">
+            {% csrf_token %}
+            <button name="Kleingebäck" class="btn kleingeback {% if kategorie == 'Kleingebäck' %}ausgewahlt{% endif %}" type="submit">Kleingebäck</button>
+        </form>
+    </nav>
+</body>
+</html>
+
